@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SessionScopeLock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "session_id",
+    "mobile_context",
+    "desktop_context",
+    "git_context",
+    "confirmed_by",
+    "confirmed_at",
+    "expires_at"
+  ],
+  "properties": {
+    "session_id": { "type": "string" },
+    "mobile_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expo_account",
+        "expo_project_id",
+        "eas_profile",
+        "ios_bundle_id",
+        "android_application_id"
+      ],
+      "properties": {
+        "expo_account": { "type": "string" },
+        "expo_project_id": { "type": "string" },
+        "eas_profile": { "type": "string" },
+        "ios_bundle_id": { "type": "string" },
+        "android_application_id": { "type": "string" }
+      }
+    },
+    "desktop_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "electron_app_id",
+        "release_channel",
+        "target_os",
+        "signing_identity_hint"
+      ],
+      "properties": {
+        "electron_app_id": { "type": "string" },
+        "release_channel": { "type": "string" },
+        "target_os": { "type": "string" },
+        "signing_identity_hint": { "type": "string" }
+      }
+    },
+    "git_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repo_path",
+        "branch",
+        "remote",
+        "user_name",
+        "user_email"
+      ],
+      "properties": {
+        "repo_path": { "type": "string" },
+        "branch": { "type": "string" },
+        "remote": { "type": "string" },
+        "user_name": { "type": "string" },
+        "user_email": { "type": "string" }
+      }
+    },
+    "confirmed_by": { "type": "string" },
+    "confirmed_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" }
+  }
+}
+

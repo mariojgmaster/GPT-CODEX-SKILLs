@@ -1,0 +1,17 @@
+# Codex helper artifacts are always stored in .codex-utils
+.codex-utils/**
+
+# Keep policy and folder anchors versioned
+!.codex-utils/
+!.codex-utils/README.md
+!.codex-utils/recurring/
+!.codex-utils/recurring/.keep
+
+# Recurring artifacts remain ignored by default.
+# Add explicit whitelist lines for files that should be versioned.
+.codex-utils/recurring/**
+!.codex-utils/recurring/.keep
+
+# Example whitelist line (uncomment and adapt when needed):
+#!.codex-utils/recurring/deploy-scopes/*.txt
+

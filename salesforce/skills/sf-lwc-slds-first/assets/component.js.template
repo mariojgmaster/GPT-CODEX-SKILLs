@@ -1,0 +1,6 @@
+import { LightningElement, api } from 'lwc';
+
+export default class {ComponentName} extends LightningElement {
+    @api message = 'Ready';
+}
+

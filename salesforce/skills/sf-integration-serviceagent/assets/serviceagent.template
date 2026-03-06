@@ -1,0 +1,16 @@
+/**
+ * @description Integration service agent scaffold.
+ */
+public with sharing class {ServiceAgentName} {
+    public class ServiceAgentException extends Exception {}
+
+    public static HttpResponse invoke(HttpRequest request) {
+        try {
+            Http client = new Http();
+            return client.send(request);
+        } catch (Exception ex) {
+            throw new ServiceAgentException('Integration call failed: ' + ex.getMessage());
+        }
+    }
+}
+

@@ -1,0 +1,24 @@
+/**
+ * @description Controller scaffold.
+ */
+public with sharing class {ControllerName} {
+    public class {ControllerName}Exception extends Exception {}
+
+    @AuraEnabled
+    public static ResponseDTO execute(RequestDTO requestDto) {
+        if (requestDto == null) {
+            throw new {ControllerName}Exception('Request payload cannot be null.');
+        }
+        return {ServiceName}.getInstance().execute(requestDto);
+    }
+
+    public class RequestDTO {
+        @AuraEnabled public String input;
+    }
+
+    public class ResponseDTO {
+        @AuraEnabled public Boolean success;
+        @AuraEnabled public String message;
+    }
+}
+

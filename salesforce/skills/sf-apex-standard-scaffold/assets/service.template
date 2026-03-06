@@ -1,0 +1,21 @@
+/**
+ * @description Service scaffold.
+ */
+public with sharing class {ServiceName} {
+    private static {ServiceName} instanceRef;
+
+    public static {ServiceName} getInstance() {
+        if (instanceRef == null) {
+            instanceRef = new {ServiceName}();
+        }
+        return instanceRef;
+    }
+
+    public {ControllerName}.ResponseDTO execute({ControllerName}.RequestDTO requestDto) {
+        {ControllerName}.ResponseDTO output = new {ControllerName}.ResponseDTO();
+        output.success = true;
+        output.message = 'OK';
+        return output;
+    }
+}
+

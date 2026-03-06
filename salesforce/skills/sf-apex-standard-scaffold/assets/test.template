@@ -1,0 +1,15 @@
+@IsTest
+private class {ControllerName}Test {
+    @IsTest
+    static void execute_shouldReturnSuccess() {
+        {ControllerName}.RequestDTO req = new {ControllerName}.RequestDTO();
+        req.input = 'sample';
+
+        Test.startTest();
+        {ControllerName}.ResponseDTO res = {ControllerName}.execute(req);
+        Test.stopTest();
+
+        System.assertEquals(true, res.success);
+    }
+}
+

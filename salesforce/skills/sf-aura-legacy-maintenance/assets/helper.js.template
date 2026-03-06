@@ -1,0 +1,6 @@
+({
+    initialize: function(component) {
+        // keep helper logic minimal in legacy maintenance mode
+    }
+})
+

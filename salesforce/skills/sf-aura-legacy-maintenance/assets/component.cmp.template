@@ -1,0 +1,5 @@
+<aura:component>
+    <aura:attribute name="message" type="String" default="Ready"/>
+    <lightning:card title="{!v.message}"/>
+</aura:component>
+

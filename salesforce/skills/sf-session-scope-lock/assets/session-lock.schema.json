@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SessionScopeLock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "session_id",
+    "sf_context",
+    "git_context",
+    "confirmed_by",
+    "confirmed_at",
+    "expires_at"
+  ],
+  "properties": {
+    "session_id": { "type": "string" },
+    "sf_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["org_name", "org_id", "instance_url", "username_or_email"],
+      "properties": {
+        "org_name": { "type": "string" },
+        "org_id": { "type": "string" },
+        "instance_url": { "type": "string" },
+        "username_or_email": { "type": "string" }
+      }
+    },
+    "git_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repo_path", "branch", "remote", "user_name", "user_email"],
+      "properties": {
+        "repo_path": { "type": "string" },
+        "branch": { "type": "string" },
+        "remote": { "type": "string" },
+        "user_name": { "type": "string" },
+        "user_email": { "type": "string" }
+      }
+    },
+    "confirmed_by": { "type": "string" },
+    "confirmed_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" }
+  }
+}
+

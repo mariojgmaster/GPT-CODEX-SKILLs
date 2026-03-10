@@ -17,8 +17,6 @@ A skill is a set of local instructions stored in a `SKILL.md` file.
 - sf-refactor-governance: Governs refactors with explicit legacy-vs-modern alignment and risk control. (file: skills/sf-refactor-governance/SKILL.md)
 - sf-validation-dryrun-targeted: Runs scoped dry-run and targeted tests only. (file: skills/sf-validation-dryrun-targeted/SKILL.md)
 - sf-git-safe-delivery: Governs safe git actions under explicit branch/user/remote confirmation. (file: skills/sf-git-safe-delivery/SKILL.md)
-- salesforce-projects: Legacy compatibility skill that forwards to router flow. (file: skills/salesforce-projects/SKILL.md)
-- sf-project-analysis-guardrails: Legacy compatibility skill that forwards to router flow. (file: skills/sf-project-analysis-guardrails/SKILL.md)
 
 ### Mandatory routing rules
 1) Always invoke `sf-router-core-mandatory` first for every request, regardless of domain.

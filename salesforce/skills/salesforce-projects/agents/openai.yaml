@@ -1,4 +1,0 @@
-interface:
-  display_name: "Salesforce Projects"
-  short_description: "Workflow para Apex, LWC, metadata e deploy"
-  default_prompt: "Use $salesforce-projects para analisar este projeto Salesforce e orientar implementacao, testes e deploy."

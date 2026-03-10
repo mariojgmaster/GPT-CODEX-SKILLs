@@ -1,15 +1,54 @@
+ /**
+ * @description       : Testes unitários para {ControllerName}.
+ * @author            : 
+ * @group             :
+ * @last modified on  : 
+ * @last modified by  : 
+ **/
 @IsTest
 private class {ControllerName}Test {
-    @IsTest
-    static void execute_shouldReturnSuccess() {
-        {ControllerName}.RequestDTO req = new {ControllerName}.RequestDTO();
-        req.input = 'sample';
+    
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- TEST SETUP ----------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
 
+    @TestSetup
+    static void setup() {
+        // TODO: criar dados necessários
+    }
+
+
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- SUCCESS -------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+
+    @IsTest
+    static void shouldExecuteSuccessfully() {
         Test.startTest();
+        {ControllerName}.RequestDTO req = new {ControllerName}.RequestDTO();
+        req.exampleField = 'x';
+
         {ControllerName}.ResponseDTO res = {ControllerName}.execute(req);
         Test.stopTest();
 
-        System.assertEquals(true, res.success);
+        System.assertNotEquals(null, res, 'Response não pode ser nula');
+        System.assertEquals(true, res.success, 'Esperava sucesso');
+    }
+
+
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- EXCEPTION -----------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+
+    @IsTest
+    static void shouldThrowWhenRequestIsNull() {
+        try {
+            Test.startTest();
+            {ControllerName}.execute(null);
+            Test.stopTest();
+            System.assert(false, 'Era esperado lançar exceção');
+        } catch (Exception ex) {
+            System.assert(ex.getMessage().contains('RequestDTO'), 'Mensagem de erro deve ser clara');
+        }
     }
 }
-

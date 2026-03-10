@@ -1,0 +1,117 @@
+/**
+ * @description       : ServiceAgent para {FeatureName}.
+ * @author            :
+ * @group             :
+ * @last modified on  :
+ * @last modified by  :
+ **/
+public class {ServiceAgentName} {
+
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- SINGLETON -----------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+
+    private static {ServiceAgentName} instance;
+
+    public static {ServiceAgentName} getInstance() {
+        if (instance == null) {
+            instance = new {ServiceAgentName}();
+        }
+        return instance;
+    }
+
+
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- CUSTOM EXCEPTIONS ---------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @description Excecao customizada para falhas do contexto deste ServiceAgent.
+     */
+    public class {ServiceAgentName}Exception extends Exception {}
+
+
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- CONSTRUCTORS --------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+
+    private {ServiceAgentName}() {}
+
+
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- PUBLIC METHODS ------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @description Executa o callout principal usando Named Credential e retorna a resposta bruta.
+     * @author
+     * @param namedCredential
+     * @param resourcePath
+     * @param httpMethod
+     * @param requestBody
+     * @return HttpResponse
+     **/
+    public HttpResponse execute(
+        String namedCredential,
+        String resourcePath,
+        String httpMethod,
+        String requestBody
+    ) {
+        HttpRequest request = buildRequest(namedCredential, resourcePath, httpMethod, requestBody);
+
+        try {
+            Http client = new Http();
+            return client.send(request);
+        } catch (CalloutException ex) {
+            throw new {ServiceAgentName}Exception('Falha ao executar callout: ' + ex.getMessage());
+        } catch (Exception ex) {
+            throw new {ServiceAgentName}Exception('Falha inesperada ao integrar com servico externo: ' + ex.getMessage());
+        }
+    }
+
+
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- PRIVATE METHODS -----------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @description Monta o HttpRequest sem expor segredos nem acoplar logica de negocio ao callout.
+     * @author
+     * @param namedCredential
+     * @param resourcePath
+     * @param httpMethod
+     * @param requestBody
+     * @return HttpRequest
+     **/
+    private HttpRequest buildRequest(
+        String namedCredential,
+        String resourcePath,
+        String httpMethod,
+        String requestBody
+    ) {
+        if (String.isBlank(namedCredential)) {
+            throw new {ServiceAgentName}Exception('Named Credential nao pode ser vazio.');
+        }
+        if (String.isBlank(httpMethod)) {
+            throw new {ServiceAgentName}Exception('Metodo HTTP nao pode ser vazio.');
+        }
+
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint('callout:' + namedCredential + normalizePath(resourcePath));
+        request.setMethod(httpMethod.trim().toUpperCase());
+        request.setHeader('Content-Type', 'application/json');
+
+        if (!String.isBlank(requestBody)) {
+            request.setBody(requestBody);
+        }
+
+        return request;
+    }
+
+    private String normalizePath(String resourcePath) {
+        if (String.isBlank(resourcePath)) {
+            return '';
+        }
+        return resourcePath.startsWith('/') ? resourcePath : '/' + resourcePath;
+    }
+}

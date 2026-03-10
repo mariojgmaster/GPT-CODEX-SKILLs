@@ -1,24 +1,91 @@
-/**
- * @description Controller scaffold.
- */
+ /**
+ * @description       : Controller para {FeatureName}.
+ * @author            : 
+ * @group             :
+ * @last modified on  : 
+ * @last modified by  : 
+ **/
 public with sharing class {ControllerName} {
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- ATTRIBUTES ----------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+    
+
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- CUSTOM EXCEPTIONS ---------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @description Exceção customizada do contexto desta Controller.
+     */
     public class {ControllerName}Exception extends Exception {}
 
+    /**
+     * @description Exceção customizada para ser usada na service.
+     */
+    public class {ControllerName}ResultException extends Exception {}
+
+
+    // ------------------------------------------------------------------------------------------------------------------------
+    // -------------------- PUBLIC METHODS ------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+
+     /**
+     * @description Operação principal (exemplo). Orquestra e delega para Service.
+     * @author 
+     * @param requestDto
+     * @return ResponseDTO
+     **/
     @AuraEnabled
     public static ResponseDTO execute(RequestDTO requestDto) {
         if (requestDto == null) {
-            throw new {ControllerName}Exception('Request payload cannot be null.');
+            throw new {ControllerName}Exception('RequestDTO não pode ser nulo.');
         }
-        return {ServiceName}.getInstance().execute(requestDto);
-    }
 
+        ResponseDTO response = new ResponseDTO();
+        try {
+            {ServiceName}.Result result = {ServiceName}.getInstance().execute(requestDto);
+            response.success = result.success;
+            response.message = result.message;
+            return response;
+        } catch({ControllerName}.{ControllerName}ResultException ex) {
+            throw new {ControllerName}.{ControllerName}ResultException('Falha ao executar operação: ' + ex.getMessage());
+        } catch (Exception ex) {
+            // Mensagem segura (não vazar dados sensíveis)
+            throw new {ControllerName}Exception('Falha ao executar operação: ' + ex.getMessage());
+        }
+    }
+    
+
+    // ----------------------------------------------------------------------------------------------------
+    // -------------------- DTOs (Inner classes) ----------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------
+
+    /**
+     * @description DTO de Request para {FeatureName}.
+     */
     public class RequestDTO {
-        @AuraEnabled public String input;
+        @AuraEnabled public String exampleField;
     }
 
+    /**
+     * @description DTO de Response para {FeatureName}.
+     */
     public class ResponseDTO {
         @AuraEnabled public Boolean success;
         @AuraEnabled public String message;
     }
-}
 
+    /**
+     * @description DTO para retorno do Result
+     */
+    public class Result {
+        public Boolean success;
+        public String message;
+
+        public Result(Boolean success, String message) {
+            this.success = success;
+            this.message = message;
+        }
+    }
+}

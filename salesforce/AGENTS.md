@@ -20,7 +20,7 @@ A skill is a set of local instructions stored in a `SKILL.md` file.
 
 ### Mandatory routing rules
 1) Always invoke `sf-router-core-mandatory` first for every request, regardless of domain.
-2) Let router select one primary skill and at most one secondary skill.
+2) Let router select one primary skill and at most one secondary skill; if the work creates Apex classes under any domain, include `sf-apex-standard-scaffold`.
 3) If action is mutable or external, invoke `sf-session-scope-lock` before execution.
 4) If confidence is low or intent/target is ambiguous, ask the developer before executing.
 5) If request includes validation/deploy, invoke `sf-validation-dryrun-targeted`.

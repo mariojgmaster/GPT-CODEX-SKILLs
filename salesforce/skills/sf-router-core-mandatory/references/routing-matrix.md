@@ -26,6 +26,12 @@
 | validation | sf-validation-dryrun-targeted | sf-discovery-impact-map |
 | git_delivery | sf-git-safe-delivery | sf-session-scope-lock |
 
+## Cross-domain Apex rule
+- If the requested change creates any Apex class, trigger, test, service, controller, or service agent, include `sf-apex-standard-scaffold`.
+- If Apex creation is the main deliverable, route `sf-apex-standard-scaffold` as primary.
+- If another domain remains primary, keep that domain skill as primary and route `sf-apex-standard-scaffold` as secondary.
+- Apply this rule before choosing `sf-validation-dryrun-targeted` as the optional secondary skill.
+
 ## Confidence guide
 - High confidence: intent clearly maps to one route and scope is explicit.
 - Medium confidence: intent is clear but scope details are partial.
@@ -35,4 +41,3 @@
 - `task_type`, `domain`, `risk_level`
 - `primary_skill`, `secondary_skills`
 - `needs_confirmation`, `confidence`, `token_budget`
-

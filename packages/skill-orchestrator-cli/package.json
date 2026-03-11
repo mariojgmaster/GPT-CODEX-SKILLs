@@ -1,6 +1,6 @@
 {
   "name": "@mariojgmaster/skill-orchestrator",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "CLI for listing, installing, and validating Codex skills from the GPT-CODEX-SKILLs catalog.",
   "type": "module",
   "bin": {

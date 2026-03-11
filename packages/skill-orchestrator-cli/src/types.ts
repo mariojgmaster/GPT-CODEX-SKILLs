@@ -44,6 +44,7 @@ export type WorkspaceManifest = z.infer<typeof WorkspaceManifestSchema>;
 export type CatalogManifest = z.infer<typeof CatalogManifestSchema>;
 export type RegistrySkill = z.infer<typeof RegistrySkillSchema>;
 export type InstallRegistry = z.infer<typeof InstallRegistrySchema>;
+export type InstallScope = 'global' | 'local';
 
 export type DoctorSeverity = 'error' | 'warning';
 
@@ -60,6 +61,7 @@ export interface DoctorResult {
 }
 
 export interface CodexPaths {
+  scope: InstallScope;
   codexHome: string;
   skillsDir: string;
   orchestratorDir: string;
@@ -85,6 +87,7 @@ export interface InstallAction {
 }
 
 export interface InstallSummary {
+  scope: InstallScope;
   workspace: string;
   routerSkill: string;
   sha: string;
@@ -96,3 +99,13 @@ export interface InstallSummary {
   }>;
 }
 
+export interface RemoveSummary {
+  scope: InstallScope;
+  workspace: string;
+  routerSkill: string;
+  removed: Array<{
+    name: string;
+    path: string;
+    action: 'remove-managed' | 'remove-unmanaged' | 'skip-missing';
+  }>;
+}

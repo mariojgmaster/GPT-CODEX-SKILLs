@@ -10,11 +10,13 @@ import { readSkillFrontmatter } from './frontmatter.js';
 import { confirm } from './prompt.js';
 import { loadRegistry, saveRegistry } from './registry.js';
 import { resolveCodexPaths } from './codex-home.js';
-import type { InstallAction, InstallSummary, RemoteCatalog, SkillManifest } from './types.js';
+import type { InstallAction, InstallScope, InstallSummary, RemoveSummary, RemoteCatalog, SkillManifest } from './types.js';
 
 interface InstallOptions {
   dryRun?: boolean;
   yes?: boolean;
+  scope?: InstallScope;
+  baseDir?: string;
 }
 
 async function exists(targetPath: string): Promise<boolean> {
@@ -141,7 +143,7 @@ export async function installFromRemote(
   target: string,
   options: InstallOptions = {}
 ): Promise<InstallSummary> {
-  const codexPaths = resolveCodexPaths();
+  const codexPaths = resolveCodexPaths(options.scope ?? 'global', options.baseDir);
   const registry = await loadRegistry(codexPaths.registryPath, remoteCatalog.repoFullName);
   const selection = resolveSelection(remoteCatalog.manifest, target);
   const managedInstalls = new Set(Object.keys(registry.installedSkills));
@@ -152,6 +154,7 @@ export async function installFromRemote(
 
   if (options.dryRun) {
     return {
+      scope: codexPaths.scope,
       workspace: selection.workspace.name,
       routerSkill: selection.workspace.routerSkill,
       sha: remoteCatalog.sha,
@@ -199,6 +202,7 @@ export async function installFromRemote(
     await saveRegistry(codexPaths.registryPath, registry);
 
     return {
+      scope: codexPaths.scope,
       workspace: selection.workspace.name,
       routerSkill: selection.workspace.routerSkill,
       sha: remoteCatalog.sha,
@@ -213,4 +217,82 @@ export async function installFromRemote(
     await rm(sessionStageRoot, { recursive: true, force: true });
     await rm(path.dirname(extractedRoot), { recursive: true, force: true });
   }
+}
+
+export async function removeFromRemote(
+  remoteCatalog: RemoteCatalog,
+  target: string,
+  options: InstallOptions = {}
+): Promise<RemoveSummary> {
+  const codexPaths = resolveCodexPaths(options.scope ?? 'global', options.baseDir);
+  const registry = await loadRegistry(codexPaths.registryPath, remoteCatalog.repoFullName);
+  const selection = resolveSelection(remoteCatalog.manifest, target);
+
+  const removed: RemoveSummary['removed'] = [];
+
+  for (const skill of selection.skills) {
+    const targetPath = path.join(codexPaths.skillsDir, skill.name);
+    const managed = registry.installedSkills[skill.name];
+    const targetExists = await exists(targetPath);
+
+    if (!targetExists) {
+      delete registry.installedSkills[skill.name];
+      removed.push({
+        name: skill.name,
+        path: targetPath,
+        action: 'skip-missing'
+      });
+      continue;
+    }
+
+    if (!managed) {
+      if (options.yes) {
+        await rm(targetPath, { recursive: true, force: true });
+        removed.push({
+          name: skill.name,
+          path: targetPath,
+          action: 'remove-unmanaged'
+        });
+        continue;
+      }
+
+      const accepted = await confirm(
+        `Skill "${skill.name}" exists in the selected scope but is not managed by this CLI. Remove it anyway?`
+      );
+
+      if (!accepted) {
+        removed.push({
+          name: skill.name,
+          path: targetPath,
+          action: 'skip-missing'
+        });
+        continue;
+      }
+
+      await rm(targetPath, { recursive: true, force: true });
+      removed.push({
+        name: skill.name,
+        path: targetPath,
+        action: 'remove-unmanaged'
+      });
+      continue;
+    }
+
+    await rm(targetPath, { recursive: true, force: true });
+    delete registry.installedSkills[skill.name];
+    removed.push({
+      name: skill.name,
+      path: targetPath,
+      action: 'remove-managed'
+    });
+  }
+
+  await saveRegistry(codexPaths.registryPath, registry);
+
+  return {
+    scope: codexPaths.scope,
+    workspace: selection.workspace.name,
+    routerSkill: selection.workspace.routerSkill,
+    removed
+  };
 }

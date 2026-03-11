@@ -13,8 +13,14 @@ Use this skill only when the RM explicitly requests documentation output.
 3. Use only the formatting and document configuration from the template. Never reuse any textual content from the original model.
 4. Use the bundled `doc` skill for DOCX creation/editing and the bundled `pdf` skill when a PDF is requested or derived from the DOCX.
 5. Write deliverables only under `.codex-utils/doc-output/`, unless the RM gives another safe destination outside the analyzed project.
-6. Organize content with headings, tables, and lists when they improve clarity.
-7. Update the footer and the table of contents before finalizing the document.
+6. Follow the visual model shown in the attached patterns for:
+   - cover
+   - header
+   - footer with page counter
+   - table of contents
+7. Use the Triscal logo color palette for table fills, separator lines, and highlighted rows.
+8. Organize content with headings, tables, and lists when they improve clarity.
+9. Update the footer and the table of contents before finalizing the document.
 
 ## Hard guardrails
 - Never create documentation by editing the analyzed project files.

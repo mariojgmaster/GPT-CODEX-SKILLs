@@ -8,9 +8,11 @@ Use `doc` for:
 - creating the DOCX from the local template copy
 - editing document structure, headings, tables, and footer content
 - updating the table of contents
+- enforcing the visual model for cover, header, footer, and TOC
 
 Use `pdf` for:
 - creating a PDF derivative when explicitly requested
 - reviewing or adjusting the generated PDF output if needed
+- validating final visual fidelity after the DOCX is generated
 
 If either skill is unavailable in the session, stop and tell the RM that the bundled dependency is missing.

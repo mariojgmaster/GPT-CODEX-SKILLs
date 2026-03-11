@@ -143,8 +143,8 @@ export async function doctorRepo(repoRoot: string): Promise<DoctorResult> {
   };
 }
 
-export async function doctorInstalled(): Promise<DoctorResult> {
-  const codexPaths = resolveCodexPaths();
+export async function doctorInstalled(scope: 'global' | 'local' = 'global', baseDir: string = process.cwd()): Promise<DoctorResult> {
+  const codexPaths = resolveCodexPaths(scope, baseDir);
   const issues: DoctorIssue[] = [];
   const registry = await loadRegistry(codexPaths.registryPath, 'mariojgmaster/GPT-CODEX-SKILLs');
 

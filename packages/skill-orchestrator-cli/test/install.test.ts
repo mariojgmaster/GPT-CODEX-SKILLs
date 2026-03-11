@@ -5,7 +5,7 @@ import path from 'node:path';
 import AdmZip from 'adm-zip';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { installFromRemote } from '../src/install.js';
+import { installFromRemote, removeFromRemote } from '../src/install.js';
 import type { CatalogManifest, RemoteCatalog } from '../src/types.js';
 
 const tempDirs: string[] = [];
@@ -107,5 +107,31 @@ describe('installFromRemote', () => {
       installFromRemote(createRemoteCatalog(createArchiveBuffer()), 'demo', { yes: true })
     ).rejects.toThrow(/Unmanaged conflict/);
   });
-});
 
+  it('installs to local scope when requested', async () => {
+    const repoRoot = await mkdtemp(path.join(os.tmpdir(), 'skill-orchestrator-repo-'));
+    tempDirs.push(repoRoot);
+
+    const summary = await installFromRemote(createRemoteCatalog(createArchiveBuffer()), 'demo', {
+      scope: 'local',
+      baseDir: repoRoot
+    });
+
+    expect(summary.scope).toBe('local');
+    expect(await readFile(path.join(repoRoot, '.codex', 'skills', 'demo-router', 'SKILL.md'), 'utf8')).toContain(
+      'name: demo-router'
+    );
+  });
+
+  it('removes a managed skill from the selected scope', async () => {
+    const codexHome = await mkdtemp(path.join(os.tmpdir(), 'skill-orchestrator-codex-'));
+    tempDirs.push(codexHome);
+    process.env.CODEX_HOME = codexHome;
+
+    await installFromRemote(createRemoteCatalog(createArchiveBuffer()), 'demo');
+    const summary = await removeFromRemote(createRemoteCatalog(createArchiveBuffer()), 'demo', { yes: true });
+
+    expect(summary.removed[0]?.action).toBe('remove-managed');
+    await expect(readFile(path.join(codexHome, 'skills', 'demo-router', 'SKILL.md'), 'utf8')).rejects.toThrow();
+  });
+});

@@ -31,5 +31,13 @@ describe('resolveCodexPaths', () => {
     expect(paths.codexHome).toBe(path.join(os.homedir(), '.codex'));
     expect(paths.registryPath).toBe(path.join(os.homedir(), '.codex', 'skill-orchestrator', 'registry.json'));
   });
-});
 
+  it('uses project-local .codex for local scope', () => {
+    const baseDir = path.join('C:', 'tmp', 'project-root');
+    const paths = resolveCodexPaths('local', baseDir);
+
+    expect(paths.scope).toBe('local');
+    expect(paths.codexHome).toBe(path.resolve(baseDir, '.codex'));
+    expect(paths.skillsDir).toBe(path.join(path.resolve(baseDir, '.codex'), 'skills'));
+  });
+});

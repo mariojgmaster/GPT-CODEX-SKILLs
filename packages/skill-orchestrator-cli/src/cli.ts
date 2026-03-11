@@ -6,7 +6,7 @@ import { loadRegistry } from './registry.js';
 import { resolveCodexPaths } from './codex-home.js';
 import { doctorInstalled, doctorRepo } from './doctor.js';
 import { GitHubCatalogSource } from './github.js';
-import { installFromRemote } from './install.js';
+import { installFromRemote, removeFromRemote } from './install.js';
 
 function printJson(payload: unknown): void {
   process.stdout.write(JSON.stringify(payload, null, 2) + '\n');
@@ -35,10 +35,11 @@ async function run(): Promise<void> {
     .description('List remote or locally installed skills.')
     .option('--workspace <name>', 'Filter by workspace')
     .option('--installed', 'Read only the local install registry')
+    .option('--scope <scope>', 'Install scope for local registry lookup: global or local', 'global')
     .option('--json', 'Output as JSON')
     .action(async (options) => {
       if (options.installed) {
-        const codexPaths = resolveCodexPaths();
+        const codexPaths = resolveCodexPaths(options.scope, process.cwd());
         const registry = await loadRegistry(codexPaths.registryPath, 'mariojgmaster/GPT-CODEX-SKILLs');
         const installed = Object.values(registry.installedSkills).filter((skill) =>
           options.workspace ? skill.workspace === options.workspace : true
@@ -90,6 +91,7 @@ async function run(): Promise<void> {
     .command('install')
     .description('Install a workspace or a workspace/skill target into Codex home.')
     .argument('<target>', 'Workspace or workspace/skill')
+    .option('--scope <scope>', 'Install scope: global or local', 'global')
     .option('--dry-run', 'Show the install plan without changing files')
     .option('--json', 'Output as JSON')
     .option('-y, --yes', 'Auto-approve managed replacements')
@@ -97,7 +99,9 @@ async function run(): Promise<void> {
       const remote = await new GitHubCatalogSource().resolve();
       const summary = await installFromRemote(remote, target, {
         dryRun: options.dryRun,
-        yes: options.yes
+        yes: options.yes,
+        scope: options.scope,
+        baseDir: process.cwd()
       });
 
       if (options.json) {
@@ -105,6 +109,7 @@ async function run(): Promise<void> {
         return;
       }
 
+      process.stdout.write(`Scope: ${summary.scope}\n`);
       process.stdout.write(`Workspace: ${summary.workspace}\n`);
       process.stdout.write(`Router skill: ${summary.routerSkill}\n`);
       process.stdout.write(`Source: ${summary.repo}@${summary.sha}\n`);
@@ -114,6 +119,35 @@ async function run(): Promise<void> {
       process.stdout.write(
         'Global installation does not enforce project-local mandatory routing. Use the router skill explicitly until a future bootstrap command exists.\n'
       );
+    });
+
+  program
+    .command('remove')
+    .alias('delete')
+    .description('Remove a workspace or a workspace/skill target from the selected Codex scope.')
+    .argument('<target>', 'Workspace or workspace/skill')
+    .option('--scope <scope>', 'Removal scope: global or local', 'global')
+    .option('--json', 'Output as JSON')
+    .option('-y, --yes', 'Auto-approve unmanaged removals')
+    .action(async (target, options) => {
+      const remote = await new GitHubCatalogSource().resolve();
+      const summary = await removeFromRemote(remote, target, {
+        yes: options.yes,
+        scope: options.scope,
+        baseDir: process.cwd()
+      });
+
+      if (options.json) {
+        printJson(summary);
+        return;
+      }
+
+      process.stdout.write(`Scope: ${summary.scope}\n`);
+      process.stdout.write(`Workspace: ${summary.workspace}\n`);
+      process.stdout.write(`Router skill: ${summary.routerSkill}\n`);
+      for (const skill of summary.removed) {
+        process.stdout.write(`- ${skill.name} -> ${skill.path} (${skill.action})\n`);
+      }
     });
 
   const doctor = program.command('doctor').description('Validate the catalog repository or local installed state.');
@@ -141,9 +175,10 @@ async function run(): Promise<void> {
   doctor
     .command('installed')
     .description('Validate installed skills tracked by the local registry.')
+    .option('--scope <scope>', 'Validation scope: global or local', 'global')
     .option('--json', 'Output as JSON')
     .action(async (options) => {
-      const result = await doctorInstalled();
+      const result = await doctorInstalled(options.scope, process.cwd());
 
       if (options.json) {
         printJson(result);

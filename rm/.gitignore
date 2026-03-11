@@ -1,0 +1,12 @@
+# Codex helper artifacts are always stored in .codex-utils
+.codex-utils/**
+
+# Keep policy anchors versioned
+!.codex-utils/
+!.codex-utils/README.md
+
+# RM case logs stay local by default
+.rm-logs/**
+!.rm-logs/
+!.rm-logs/.gitkeep
+

@@ -1,0 +1,3 @@
+interface:
+  display_name: "RM Logbook"
+  short_description: "Track RM cases with incremental per-case logs"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "RM Readonly Lock"
+  short_description: "Lock environment context for safe RM analysis"

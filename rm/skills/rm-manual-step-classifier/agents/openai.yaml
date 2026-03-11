@@ -1,0 +1,3 @@
+interface:
+  display_name: "RM Manual Steps"
+  short_description: "Classify manual steps with release-safe criteria"

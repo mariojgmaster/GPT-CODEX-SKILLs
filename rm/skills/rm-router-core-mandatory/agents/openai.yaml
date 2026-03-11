@@ -1,0 +1,3 @@
+interface:
+  display_name: "RM Router Core"
+  short_description: "Route RM analysis safely in read-only mode"

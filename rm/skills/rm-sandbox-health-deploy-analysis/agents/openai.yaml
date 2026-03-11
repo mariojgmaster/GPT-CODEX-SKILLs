@@ -1,0 +1,3 @@
+interface:
+  display_name: "RM Health Triage"
+  short_description: "Analyze sandbox health and deploy failures safely"

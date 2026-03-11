@@ -158,7 +158,56 @@
           "defaultInstall": true
         }
       ]
+    },
+    {
+      "name": "rm",
+      "path": "rm",
+      "description": "Read-only release-management workspace for Salesforce, Flosum, DevOps, deploy triage, manual-step analysis, and RM case logging.",
+      "routerSkill": "rm-router-core-mandatory",
+      "skills": [
+        {
+          "name": "rm-router-core-mandatory",
+          "path": "rm/skills/rm-router-core-mandatory",
+          "description": "Mandatory first-hop router for read-only RM requests.",
+          "workspace": "rm",
+          "defaultInstall": true
+        },
+        {
+          "name": "rm-readonly-session-lock",
+          "path": "rm/skills/rm-readonly-session-lock",
+          "description": "Locks read-only environment and evidence context per session.",
+          "workspace": "rm",
+          "defaultInstall": true
+        },
+        {
+          "name": "rm-sandbox-health-deploy-analysis",
+          "path": "rm/skills/rm-sandbox-health-deploy-analysis",
+          "description": "Analyzes org health, validate failures, and deploy errors without mutation.",
+          "workspace": "rm",
+          "defaultInstall": true
+        },
+        {
+          "name": "rm-manual-step-classifier",
+          "path": "rm/skills/rm-manual-step-classifier",
+          "description": "Classifies manual steps as deployable, non-deployable, or inconclusive.",
+          "workspace": "rm",
+          "defaultInstall": true
+        },
+        {
+          "name": "rm-solution-architecture-advisor",
+          "path": "rm/skills/rm-solution-architecture-advisor",
+          "description": "Explains solution architecture and release implications for RMs.",
+          "workspace": "rm",
+          "defaultInstall": true
+        },
+        {
+          "name": "rm-resolution-logbook",
+          "path": "rm/skills/rm-resolution-logbook",
+          "description": "Creates and updates incremental RM case logs.",
+          "workspace": "rm",
+          "defaultInstall": true
+        }
+      ]
     }
   ]
 }
-

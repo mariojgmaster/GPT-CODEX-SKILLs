@@ -26,7 +26,7 @@ async function run(): Promise<void> {
   const program = new Command();
 
   program
-    .name('skills')
+    .name('codex-skills')
     .description('List, install, and validate Codex skills from the GPT-CODEX-SKILLs catalog.')
     .showHelpAfterError();
 

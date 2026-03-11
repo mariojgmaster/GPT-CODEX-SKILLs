@@ -22,54 +22,60 @@ npm.cmd config set prefix "%APPDATA%\\npm" --location=user
 npm.cmd install -g @mariojgmaster/skill-orchestrator
 ```
 
+The global command is:
+
+```bash
+codex-skills
+```
+
 ## Core Commands
 
 List remote catalog workspaces and skills:
 
 ```bash
-skills list
-skills list --workspace rm
+codex-skills list
+codex-skills list --workspace rm
 ```
 
 Install a complete workspace:
 
 ```bash
-skills install salesforce
-skills install mobile-desktop
-skills install rm
+codex-skills install salesforce
+codex-skills install mobile-desktop
+codex-skills install rm
 ```
 
 Install into the current project root instead of the global Codex home:
 
 ```bash
-skills install rm --scope local
+codex-skills install rm --scope local
 ```
 
 Install a single skill:
 
 ```bash
-skills install salesforce/sf-router-core-mandatory
+codex-skills install salesforce/sf-router-core-mandatory
 ```
 
 Inspect installed skills:
 
 ```bash
-skills list --installed
-skills list --installed --scope local
+codex-skills list --installed
+codex-skills list --installed --scope local
 ```
 
 Remove an installed workspace or skill:
 
 ```bash
-skills remove rm
-skills remove rm/doc --scope local
+codex-skills remove rm
+codex-skills remove rm/doc --scope local
 ```
 
 Validate a local skill repository:
 
 ```bash
-skills doctor repo .
-skills doctor installed
+codex-skills doctor repo .
+codex-skills doctor installed
 ```
 
 ## Behavior

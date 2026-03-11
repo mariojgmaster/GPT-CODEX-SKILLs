@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "sourceRepo": "mariojgmaster/GPT-CODEX-SKILLs",
+  "defaultBranch": "master",
+  "workspaces": [
+    {
+      "name": "salesforce",
+      "path": "salesforce",
+      "description": "Salesforce workspace with router-first execution, scope-safe validation, and specialist skills for Apex, LWC, Flow, integrations, and refactors.",
+      "routerSkill": "sf-router-core-mandatory",
+      "skills": [
+        {
+          "name": "sf-router-core-mandatory",
+          "path": "salesforce/skills/sf-router-core-mandatory",
+          "description": "Mandatory first-hop router for Salesforce requests.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-session-scope-lock",
+          "path": "salesforce/skills/sf-session-scope-lock",
+          "description": "Locks Salesforce and Git execution context per session.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-general-analysis-planning",
+          "path": "salesforce/skills/sf-general-analysis-planning",
+          "description": "Handles non-mutating analysis, planning, and estimation tasks.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-discovery-impact-map",
+          "path": "salesforce/skills/sf-discovery-impact-map",
+          "description": "Maps Salesforce impact scope before implementation.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-apex-standard-scaffold",
+          "path": "salesforce/skills/sf-apex-standard-scaffold",
+          "description": "Implements Apex changes with fixed scaffolds and guardrails.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-lwc-slds-first",
+          "path": "salesforce/skills/sf-lwc-slds-first",
+          "description": "Implements LWC work using SLDS-first principles.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-aura-legacy-maintenance",
+          "path": "salesforce/skills/sf-aura-legacy-maintenance",
+          "description": "Maintains Aura artifacts in legacy-safe mode.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-flow-metadata-scope",
+          "path": "salesforce/skills/sf-flow-metadata-scope",
+          "description": "Implements Flow and metadata changes with strict scoping.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-integration-serviceagent",
+          "path": "salesforce/skills/sf-integration-serviceagent",
+          "description": "Implements Salesforce integrations using service-agent patterns.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-refactor-governance",
+          "path": "salesforce/skills/sf-refactor-governance",
+          "description": "Governs scoped refactors with explicit risk control.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-validation-dryrun-targeted",
+          "path": "salesforce/skills/sf-validation-dryrun-targeted",
+          "description": "Runs targeted validation and dry-run commands only.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        },
+        {
+          "name": "sf-git-safe-delivery",
+          "path": "salesforce/skills/sf-git-safe-delivery",
+          "description": "Governs safe Git delivery flow for Salesforce work.",
+          "workspace": "salesforce",
+          "defaultInstall": true
+        }
+      ]
+    },
+    {
+      "name": "mobile-desktop",
+      "path": "mobile-desktop",
+      "description": "Mobile and desktop workspace with router-first orchestration for Expo, React Native, Electron, release validation, and safe Git delivery.",
+      "routerSkill": "md-router-core-mandatory",
+      "skills": [
+        {
+          "name": "md-router-core-mandatory",
+          "path": "mobile-desktop/skills/md-router-core-mandatory",
+          "description": "Mandatory first-hop router for mobile and desktop requests.",
+          "workspace": "mobile-desktop",
+          "defaultInstall": true
+        },
+        {
+          "name": "md-session-scope-lock",
+          "path": "mobile-desktop/skills/md-session-scope-lock",
+          "description": "Locks mobile, desktop, and Git execution context per session.",
+          "workspace": "mobile-desktop",
+          "defaultInstall": true
+        },
+        {
+          "name": "md-general-analysis-planning",
+          "path": "mobile-desktop/skills/md-general-analysis-planning",
+          "description": "Handles non-mutating analysis, planning, and estimation tasks.",
+          "workspace": "mobile-desktop",
+          "defaultInstall": true
+        },
+        {
+          "name": "md-discovery-impact-map",
+          "path": "mobile-desktop/skills/md-discovery-impact-map",
+          "description": "Maps implementation impact before mobile or desktop changes.",
+          "workspace": "mobile-desktop",
+          "defaultInstall": true
+        },
+        {
+          "name": "md-react-native-expo-feature",
+          "path": "mobile-desktop/skills/md-react-native-expo-feature",
+          "description": "Implements Expo and React Native features with platform-aware UI guidance.",
+          "workspace": "mobile-desktop",
+          "defaultInstall": true
+        },
+        {
+          "name": "md-electron-desktop-feature",
+          "path": "mobile-desktop/skills/md-electron-desktop-feature",
+          "description": "Implements Electron desktop features with process boundary guidance.",
+          "workspace": "mobile-desktop",
+          "defaultInstall": true
+        },
+        {
+          "name": "md-validation-release-guardrails",
+          "path": "mobile-desktop/skills/md-validation-release-guardrails",
+          "description": "Runs targeted validation, build checks, and release guardrails.",
+          "workspace": "mobile-desktop",
+          "defaultInstall": true
+        },
+        {
+          "name": "md-git-safe-delivery",
+          "path": "mobile-desktop/skills/md-git-safe-delivery",
+          "description": "Governs safe Git delivery for mobile and desktop work.",
+          "workspace": "mobile-desktop",
+          "defaultInstall": true
+        }
+      ]
+    }
+  ]
+}
+

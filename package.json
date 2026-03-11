@@ -1,0 +1,13 @@
+{
+  "name": "gpt-codex-skills-repo",
+  "private": true,
+  "workspaces": [
+    "packages/skill-orchestrator-cli"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @mariojgmaster/skill-orchestrator",
+    "test": "npm run test --workspace @mariojgmaster/skill-orchestrator",
+    "smoke": "npm run smoke --workspace @mariojgmaster/skill-orchestrator"
+  }
+}
+

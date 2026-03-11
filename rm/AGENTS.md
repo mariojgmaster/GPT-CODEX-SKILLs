@@ -10,6 +10,9 @@ A skill is a set of local instructions stored in a `SKILL.md` file.
 - rm-sandbox-health-deploy-analysis: Analyzes org health, validation failures, deploy errors, and Flosum release evidence without mutating environments. (file: skills/rm-sandbox-health-deploy-analysis/SKILL.md)
 - rm-manual-step-classifier: Classifies manual steps as deployable, non-deployable, or inconclusive with explicit evidence gaps. (file: skills/rm-manual-step-classifier/SKILL.md)
 - rm-solution-architecture-advisor: Explains technical solutions and their Salesforce, Flosum, DevOps, and release-management implications. (file: skills/rm-solution-architecture-advisor/SKILL.md)
+- rm-documentation-docx-pdf: Creates RM documentation as DOCX or PDF using the local Triscal template copy and the bundled `doc` and `pdf` skills in this workspace. (file: skills/rm-documentation-docx-pdf/SKILL.md)
+- doc: Bundled DOCX skill for reading, creating, and editing `.docx` files with layout fidelity. (file: skills/doc/SKILL.md)
+- pdf: Bundled PDF skill for reading, creating, and reviewing PDF files with layout fidelity. (file: skills/pdf/SKILL.md)
 - rm-resolution-logbook: Creates and updates per-case RM logs in `.rm-logs/` with incremental status tracking. (file: skills/rm-resolution-logbook/SKILL.md)
 
 ### Mandatory routing rules
@@ -19,15 +22,22 @@ A skill is a set of local instructions stored in a `SKILL.md` file.
 4) If confidence is low, environments are ambiguous, or evidence is incomplete, ask the RM before continuing.
 5) If request asks for any mutation, refuse clearly and continue only with read-only analysis alternatives.
 6) If case should be recorded, use `rm-resolution-logbook` as the optional secondary skill.
+7) If the RM explicitly requests documentation, route to `rm-documentation-docx-pdf`.
 
 ### Security and scope rules
 - Never deploy, quick deploy, promote, push, update, delete, or mutate any analyzed environment.
 - Never provide executable mutation instructions for the analyzed environment, even when explicitly requested.
+- Never edit, create, or rewrite files in the analyzed project or repository under inspection.
 - Never continue when an environment is missing name, URL, Id, or acting user.
 - Never assume environment mapping when more than one org/sandbox is involved.
+- Only allow writes inside this workspace for:
+  - `.codex-utils/`
+  - `.rm-logs/`
+  - explicit documentation outputs under `.codex-utils/doc-output/`
 - Never store helper artifacts outside `.codex-utils`.
 - Never store RM case logs outside `.rm-logs/`.
 - Never mark a case as `solucionado_confirmado` without explicit RM confirmation.
+- Use any required read-only API, local machine information, and the Salesforce CLI when they help the analysis.
 
 ### How to use skills
 - Discovery: Skill metadata is loaded first; body and references are loaded on demand.

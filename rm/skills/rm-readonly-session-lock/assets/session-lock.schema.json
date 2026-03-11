@@ -9,6 +9,8 @@
     "environment_contexts",
     "flosum_context",
     "git_context",
+    "machine_context",
+    "tooling_context",
     "confirmed_by",
     "confirmed_at",
     "expires_at"
@@ -55,6 +57,30 @@
         "remote": { "type": "string" },
         "user_name": { "type": "string" },
         "user_email": { "type": "string" }
+      }
+    },
+    "machine_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hostname", "current_user", "os_platform", "workspace_path"],
+      "properties": {
+        "hostname": { "type": "string" },
+        "current_user": { "type": "string" },
+        "os_platform": { "type": "string" },
+        "workspace_path": { "type": "string" }
+      }
+    },
+    "tooling_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sf_cli_available", "sf_cli_version"],
+      "properties": {
+        "sf_cli_available": { "type": "boolean" },
+        "sf_cli_version": { "type": "string" },
+        "sf_default_org_name": { "type": "string" },
+        "sf_default_org_id": { "type": "string" },
+        "sf_default_instance_url": { "type": "string" },
+        "sf_default_username": { "type": "string" }
       }
     },
     "confirmed_by": { "type": "string" },

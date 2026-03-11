@@ -1,6 +1,6 @@
 ---
 name: rm-readonly-session-lock
-description: Confirm and lock read-only environment, Flosum, and Git context before any remote inspection, validate, or external RM analysis. Use when the request touches one or more environments, read-only checks, or release evidence gathered outside the repository.
+description: Confirm and lock read-only environment, Flosum, Git, machine, and tooling context before any remote inspection, validate, or external RM analysis. Use when the request touches one or more environments, read-only checks, Salesforce CLI data, or release evidence gathered outside the repository.
 ---
 
 # RM Readonly Session Lock
@@ -20,8 +20,9 @@ Use this skill before any remote read-only inspection, validate/check, or multi-
    - branch or baseline
    - package or release reference
 4. Confirm Git context when local release artifacts are part of the evidence.
-5. Write the lock state to `.codex-utils/session-lock/session-lock.json` using `assets/session-lock.schema.json`.
-6. Revalidate the lock with `scripts/validate-lock.(ps1|sh)` before execution.
+5. Capture local machine and tooling context, including Salesforce CLI availability and version.
+6. Write the lock state to `.codex-utils/session-lock/session-lock.json` using `assets/session-lock.schema.json`.
+7. Revalidate the lock with `scripts/validate-lock.(ps1|sh)` before execution.
 
 ## Lock lifecycle
 - Keep `access_mode` fixed as `read_only`.
@@ -30,5 +31,6 @@ Use this skill before any remote read-only inspection, validate/check, or multi-
 
 ## Hard guardrails
 - Never reinterpret a read-only lock as permission to mutate.
+- Never reinterpret read-only access to machine APIs or the Salesforce CLI as permission to edit project files.
 - Never continue when any environment is unlabeled or incomplete.
 - Never allow validate/check execution without explicit target confirmation.

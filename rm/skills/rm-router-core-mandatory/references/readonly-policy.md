@@ -1,12 +1,13 @@
 # Read-only policy
 
-The `rm` workspace never mutates analyzed environments.
+The `rm` workspace never mutates analyzed environments or the analyzed project content.
 
 Forbidden actions:
 - deploy
 - quick deploy
 - promote
 - push/update/delete metadata
+- create/edit/delete files in the analyzed project
 - data write
 - permission change
 - branch mutation
@@ -19,6 +20,14 @@ Allowed actions:
 - log inspection
 - metadata/package inspection
 - architecture and release analysis
+- any read-only API needed for analysis
+- local machine inspection
+- Salesforce CLI inspection
+
+Allowed writes inside this workspace only:
+- `.codex-utils/`
+- `.rm-logs/`
+- `.codex-utils/doc-output/` for explicit documentation requests
 
 When a mutation is requested:
 1. Refuse clearly.

@@ -18,3 +18,4 @@ Use this skill when an RM case should be recorded or consolidated.
 - Never log secrets, tokens, or raw credentials.
 - Never mark a case as solved without explicit RM confirmation.
 - Keep one file per case and append incrementally instead of creating duplicates.
+- Never write outside `.rm-logs/` when logging a case.

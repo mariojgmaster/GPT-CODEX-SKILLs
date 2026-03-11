@@ -10,6 +10,7 @@
 - Needs confirmation:
 - Read-only mode: true
 - Refusal required:
+- Write scope:
 
 ## Evidence
 - Evidence reviewed:

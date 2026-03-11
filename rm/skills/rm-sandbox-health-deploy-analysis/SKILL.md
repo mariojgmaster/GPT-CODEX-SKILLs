@@ -17,6 +17,7 @@ Use this skill for org health analysis, validate failures, deploy errors, and Fl
 
 ## Hard guardrails
 - Never execute mutating deployment actions.
+- Never edit files in the analyzed project or repository.
 - Never treat validate success as release approval by itself.
 - Never compare multiple environments without explicit labels.
 - Never state a root cause as certain when evidence is partial.

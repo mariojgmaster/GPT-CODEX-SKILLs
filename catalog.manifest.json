@@ -201,6 +201,27 @@
           "defaultInstall": true
         },
         {
+          "name": "rm-documentation-docx-pdf",
+          "path": "rm/skills/rm-documentation-docx-pdf",
+          "description": "Creates DOCX and PDF documentation from RM analysis using the local Triscal template copy.",
+          "workspace": "rm",
+          "defaultInstall": true
+        },
+        {
+          "name": "doc",
+          "path": "rm/skills/doc",
+          "description": "Bundled DOCX skill for creating and reviewing RM documentation.",
+          "workspace": "rm",
+          "defaultInstall": true
+        },
+        {
+          "name": "pdf",
+          "path": "rm/skills/pdf",
+          "description": "Bundled PDF skill for generating and reviewing RM documentation output.",
+          "workspace": "rm",
+          "defaultInstall": true
+        },
+        {
           "name": "rm-resolution-logbook",
           "path": "rm/skills/rm-resolution-logbook",
           "description": "Creates and updates incremental RM case logs.",

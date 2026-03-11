@@ -16,5 +16,6 @@ Use this skill to classify release manual steps.
 
 ## Hard guardrails
 - Never mark a step as deployable without evidence that it can be automated safely.
+- Never modify project files while classifying the step.
 - Treat data fixes, secret handling, user interaction, approvals, and one-off admin actions as non-deployable unless proven otherwise.
 - Keep the answer focused on classification and release impact, not execution.

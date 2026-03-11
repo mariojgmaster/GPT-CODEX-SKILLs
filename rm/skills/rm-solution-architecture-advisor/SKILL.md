@@ -16,5 +16,6 @@ Use this skill when the RM needs a technical explanation of a solution or releas
 
 ## Hard guardrails
 - Never translate analysis into executable mutation instructions.
+- Never edit the analyzed project or repository content.
 - Always separate facts, assumptions, and inferred risk.
 - Always include architecture insight, release implication, and business impact.

@@ -14,7 +14,8 @@
     "token_budget",
     "readonly_mode",
     "evidence_sources",
-    "refusal_required"
+    "refusal_required",
+    "write_scope"
   ],
   "properties": {
     "task_type": { "type": "string" },
@@ -48,5 +49,10 @@
       "items": { "type": "string" }
     },
     "refusal_required": { "type": "boolean" }
+    ,
+    "write_scope": {
+      "type": "string",
+      "enum": ["none", "rm_internal_only", "documentation_output_only"]
+    }
   }
 }

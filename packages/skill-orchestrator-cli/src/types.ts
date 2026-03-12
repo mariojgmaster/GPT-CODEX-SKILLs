@@ -63,6 +63,7 @@ export interface DoctorResult {
 export interface CodexPaths {
   scope: InstallScope;
   codexHome: string;
+  installRoot: string;
   skillsDir: string;
   orchestratorDir: string;
   registryPath: string;

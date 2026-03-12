@@ -4,6 +4,7 @@ import path from 'node:path';
 import type { CodexPaths, InstallScope } from './types.js';
 
 export function resolveCodexPaths(scope: InstallScope = 'global', baseDir: string = process.cwd()): CodexPaths {
+  const installRoot = scope === 'local' ? path.resolve(baseDir) : undefined;
   const codexHome =
     scope === 'local'
       ? path.resolve(baseDir, '.codex')
@@ -16,7 +17,8 @@ export function resolveCodexPaths(scope: InstallScope = 'global', baseDir: strin
   return {
     scope,
     codexHome,
-    skillsDir: path.join(codexHome, 'skills'),
+    installRoot: installRoot ?? codexHome,
+    skillsDir: scope === 'local' ? path.join(path.resolve(baseDir), 'skills') : path.join(codexHome, 'skills'),
     orchestratorDir,
     registryPath: path.join(orchestratorDir, 'registry.json'),
     stagingRoot: path.join(orchestratorDir, 'staging')

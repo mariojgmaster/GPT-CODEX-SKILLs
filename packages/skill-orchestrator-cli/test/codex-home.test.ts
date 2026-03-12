@@ -38,6 +38,7 @@ describe('resolveCodexPaths', () => {
 
     expect(paths.scope).toBe('local');
     expect(paths.codexHome).toBe(path.resolve(baseDir, '.codex'));
-    expect(paths.skillsDir).toBe(path.join(path.resolve(baseDir, '.codex'), 'skills'));
+    expect(paths.installRoot).toBe(path.resolve(baseDir));
+    expect(paths.skillsDir).toBe(path.join(path.resolve(baseDir), 'skills'));
   });
 });

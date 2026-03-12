@@ -16,18 +16,22 @@ A skill is a set of local instructions stored in a `SKILL.md` file.
 - rm-resolution-logbook: Creates and updates per-case RM logs in `.rm-logs/` with incremental status tracking. (file: skills/rm-resolution-logbook/SKILL.md)
 
 ### Mandatory routing rules
-1) Always invoke `rm-router-core-mandatory` first for every request.
-2) Let router select one primary skill and at most one secondary skill.
-3) If request needs remote read-only evidence, validate/check execution, or multi-environment analysis, invoke `rm-readonly-session-lock` first.
-4) If confidence is low, environments are ambiguous, or evidence is incomplete, ask the RM before continuing.
-5) If request asks for any mutation, refuse clearly and continue only with read-only analysis alternatives.
-6) If case should be recorded, use `rm-resolution-logbook` as the optional secondary skill.
-7) If the RM explicitly requests documentation, route to `rm-documentation-docx-pdf`.
+1) At the start of every session, ask explicitly: `Voce esta atuando como RM (DevOps)?`
+2) If the user does not confirm `sim`, stop using this workspace and state that these rules apply only to RM sessions.
+3) If the user confirms `sim`, these RM rules override every other skill on the machine for the full session.
+4) Always invoke `rm-router-core-mandatory` first for every request.
+5) Let router select one primary skill and at most one secondary skill.
+6) If request needs remote read-only evidence, validate/check execution, or multi-environment analysis, invoke `rm-readonly-session-lock` first.
+7) If confidence is low, environments are ambiguous, or evidence is incomplete, ask the RM before continuing.
+8) If request asks for any mutation, refuse clearly and continue only with read-only analysis alternatives.
+9) If case should be recorded, use `rm-resolution-logbook` as the optional secondary skill.
+10) If the RM explicitly requests documentation, route to `rm-documentation-docx-pdf`.
 
 ### Security and scope rules
 - Never deploy, quick deploy, promote, push, update, delete, or mutate any analyzed environment.
 - Never provide executable mutation instructions for the analyzed environment, even when explicitly requested.
-- Never edit, create, or rewrite files in the analyzed project or repository under inspection.
+- Never edit, create, rewrite, annotate, comment, instrument, mark, debug, re-signature, or otherwise alter any project artifact under inspection.
+- Never alter project files even for comments, notes, logs, debug code, return changes, annotations, formatting changes, or temporary helpers.
 - Never continue when an environment is missing name, URL, Id, or acting user.
 - Never assume environment mapping when more than one org/sandbox is involved.
 - Only allow writes inside this workspace for:

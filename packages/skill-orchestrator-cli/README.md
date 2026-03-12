@@ -51,6 +51,8 @@ Install into the current project root instead of the global Codex home:
 codex-skills install rm --scope local
 ```
 
+Local scope installs the selected workspace directly into the current project root. For example, a workspace can place `AGENTS.md`, `skills/`, `.codex-utils/`, and any other workspace files at the project root.
+
 Install a single skill:
 
 ```bash
@@ -68,7 +70,8 @@ Remove an installed workspace or skill:
 
 ```bash
 codex-skills remove rm
-codex-skills remove rm/doc --scope local
+codex-skills remove salesforce/sf-router-core-mandatory
+codex-skills remove rm --scope local
 ```
 
 Validate a local skill repository:
@@ -83,7 +86,10 @@ codex-skills doctor installed
 - Installs skills into `$CODEX_HOME/skills` when `CODEX_HOME` is defined.
 - Falls back to `~/.codex/skills` when `CODEX_HOME` is not set.
 - Supports `--scope global` and `--scope local`.
-- Local scope installs into `./.codex/skills` at the current project root.
+- Global scope installs individual skills into the Codex home.
+- Local scope installs one workspace directly into the current project root and keeps orchestration metadata under `./.codex/`.
+- Local scope supports full workspace install/remove only.
+- If another workspace is already installed locally, the CLI requires explicit confirmation before replacement and shows the project paths that will be removed.
 - Resolves the catalog from the GitHub repository configured in `catalog.manifest.json`.
 - Installs workspace packs as individual Codex skills compatible with the native skill model.
 - Maintains a local registry for managed installs.

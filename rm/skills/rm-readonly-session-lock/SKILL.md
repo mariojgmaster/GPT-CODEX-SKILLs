@@ -8,21 +8,22 @@ description: Confirm and lock read-only environment, Flosum, Git, machine, and t
 Use this skill before any remote read-only inspection, validate/check, or multi-environment analysis.
 
 ## Required flow
-1. Collect available context using `scripts/capture-context.(ps1|sh)`.
-2. Confirm each environment with:
+1. Confirm the session is explicitly acting as `RM (DevOps)` under the router rules.
+2. Collect available context using `scripts/capture-context.(ps1|sh)`.
+3. Confirm each environment with:
    - role label
    - org name
    - org id
    - instance URL
    - acting username/email
-3. Confirm Flosum context when relevant:
+4. Confirm Flosum context when relevant:
    - org or tenant label
    - branch or baseline
    - package or release reference
-4. Confirm Git context when local release artifacts are part of the evidence.
-5. Capture local machine and tooling context, including Salesforce CLI availability and version.
-6. Write the lock state to `.codex-utils/session-lock/session-lock.json` using `assets/session-lock.schema.json`.
-7. Revalidate the lock with `scripts/validate-lock.(ps1|sh)` before execution.
+5. Confirm Git context when local release artifacts are part of the evidence.
+6. Capture local machine and tooling context, including Salesforce CLI availability and version.
+7. Write the lock state to `.codex-utils/session-lock/session-lock.json` using `assets/session-lock.schema.json`.
+8. Revalidate the lock with `scripts/validate-lock.(ps1|sh)` before execution.
 
 ## Lock lifecycle
 - Keep `access_mode` fixed as `read_only`.
@@ -32,5 +33,6 @@ Use this skill before any remote read-only inspection, validate/check, or multi-
 ## Hard guardrails
 - Never reinterpret a read-only lock as permission to mutate.
 - Never reinterpret read-only access to machine APIs or the Salesforce CLI as permission to edit project files.
+- Never alter any analyzed project artifact, even for comments, debugs, annotations, markers, signatures, or returns.
 - Never continue when any environment is unlabeled or incomplete.
 - Never allow validate/check execution without explicit target confirmation.

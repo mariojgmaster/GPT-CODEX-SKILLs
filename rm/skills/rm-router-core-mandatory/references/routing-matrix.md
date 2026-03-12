@@ -19,9 +19,12 @@
 | logging | rm-resolution-logbook | |
 
 ## Read-only routing rule
+- Start every session by confirming the user is acting as `RM (DevOps)`.
+- If the answer is not explicit confirmation, do not route any RM specialist skill.
 - If the request needs remote inspection, run `rm-readonly-session-lock` first.
 - If the request mentions more than one environment, require explicit labels such as `source`, `target`, or `reference`.
 - If the request asks for any mutation, set `refusal_required=true` and keep the route in read-only analysis mode.
+- Treat any request to comment, annotate, debug, mark, re-signature, or otherwise alter a project artifact as a mutation request.
 - If the request explicitly asks for documentation, allow writes only for documentation output under `.codex-utils/doc-output/`.
 
 ## Confidence guide

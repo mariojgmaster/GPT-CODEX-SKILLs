@@ -60,6 +60,9 @@ function createArchiveBuffer(): Buffer {
   const zip = new AdmZip();
   zip.addFile('owner-repo-abc123/demo/skills/demo-router/SKILL.md', Buffer.from('---\nname: demo-router\ndescription: Demo router skill.\n---\n\n# Demo\n'));
   zip.addFile('owner-repo-abc123/demo/skills/demo-router/agents/standard.md', Buffer.from('# agent\n'));
+  zip.addFile('owner-repo-abc123/demo/AGENTS.md', Buffer.from('# demo agents\n'));
+  zip.addFile('owner-repo-abc123/demo/.gitignore', Buffer.from('.codex/\n'));
+  zip.addFile('owner-repo-abc123/demo/.codex-utils/README.md', Buffer.from('# codex utils\n'));
   return zip.toBuffer();
 }
 
@@ -118,9 +121,20 @@ describe('installFromRemote', () => {
     });
 
     expect(summary.scope).toBe('local');
-    expect(await readFile(path.join(repoRoot, '.codex', 'skills', 'demo-router', 'SKILL.md'), 'utf8')).toContain(
-      'name: demo-router'
-    );
+    expect(await readFile(path.join(repoRoot, 'skills', 'demo-router', 'SKILL.md'), 'utf8')).toContain('name: demo-router');
+    expect(await readFile(path.join(repoRoot, 'AGENTS.md'), 'utf8')).toContain('demo agents');
+  });
+
+  it('blocks local single-skill install targets', async () => {
+    const repoRoot = await mkdtemp(path.join(os.tmpdir(), 'skill-orchestrator-repo-'));
+    tempDirs.push(repoRoot);
+
+    await expect(
+      installFromRemote(createRemoteCatalog(createArchiveBuffer()), 'demo/demo-router', {
+        scope: 'local',
+        baseDir: repoRoot
+      })
+    ).rejects.toThrow(/full workspace install/i);
   });
 
   it('removes a managed skill from the selected scope', async () => {

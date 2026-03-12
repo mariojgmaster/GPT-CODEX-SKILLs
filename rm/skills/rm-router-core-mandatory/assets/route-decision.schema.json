@@ -10,6 +10,7 @@
     "primary_skill",
     "secondary_skills",
     "needs_confirmation",
+    "rm_role_confirmed",
     "confidence",
     "token_budget",
     "readonly_mode",
@@ -31,6 +32,7 @@
       "maxItems": 1
     },
     "needs_confirmation": { "type": "boolean" },
+    "rm_role_confirmed": { "type": "boolean" },
     "confidence": {
       "type": "number",
       "minimum": 0,

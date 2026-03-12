@@ -89,7 +89,7 @@ async function run(): Promise<void> {
 
   program
     .command('install')
-    .description('Install a workspace or a workspace/skill target into Codex home.')
+    .description('Install a workspace or a workspace/skill target into the selected scope.')
     .argument('<target>', 'Workspace or workspace/skill')
     .option('--scope <scope>', 'Install scope: global or local', 'global')
     .option('--dry-run', 'Show the install plan without changing files')
@@ -117,7 +117,9 @@ async function run(): Promise<void> {
         process.stdout.write(`- ${skill.name} -> ${skill.path} (${skill.action})\n`);
       }
       process.stdout.write(
-        'Global installation does not enforce project-local mandatory routing. Use the router skill explicitly until a future bootstrap command exists.\n'
+        summary.scope === 'global'
+          ? 'Global installation does not enforce project-local mandatory routing. Use the router skill explicitly until a future bootstrap command exists.\n'
+          : 'Local installation places the workspace directly at the current project root and allows only one workspace per project.\n'
       );
     });
 

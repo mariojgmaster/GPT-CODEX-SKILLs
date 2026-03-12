@@ -8,6 +8,8 @@ Forbidden actions:
 - promote
 - push/update/delete metadata
 - create/edit/delete files in the analyzed project
+- add comments, markers, annotations, or debug statements
+- change signatures, return types, return values, formatting, or temporary instrumentation
 - data write
 - permission change
 - branch mutation

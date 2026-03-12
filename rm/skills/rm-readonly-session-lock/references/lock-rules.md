@@ -1,5 +1,7 @@
 # Lock rules
 
+Before collecting any environment lock, confirm the session is explicitly acting as `RM (DevOps)`.
+
 Use a read-only lock whenever the RM request touches:
 - one or more live environments
 - read-only validate/check execution

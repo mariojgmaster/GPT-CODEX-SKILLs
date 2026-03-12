@@ -8,6 +8,7 @@
 - Secondary skill:
 - Confidence:
 - Needs confirmation:
+- RM role confirmed:
 - Read-only mode: true
 - Refusal required:
 - Write scope:

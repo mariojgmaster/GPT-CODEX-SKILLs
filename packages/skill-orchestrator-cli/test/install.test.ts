@@ -125,6 +125,24 @@ describe('installFromRemote', () => {
     expect(await readFile(path.join(repoRoot, 'AGENTS.md'), 'utf8')).toContain('demo agents');
   });
 
+  it('preserves existing local gitignore and codex-utils during local install', async () => {
+    const repoRoot = await mkdtemp(path.join(os.tmpdir(), 'skill-orchestrator-repo-'));
+    tempDirs.push(repoRoot);
+
+    await writeFile(path.join(repoRoot, '.gitignore'), 'existing-ignore\n', 'utf8');
+    await mkdir(path.join(repoRoot, '.codex-utils'), { recursive: true });
+    await writeFile(path.join(repoRoot, '.codex-utils', 'README.md'), 'existing-codex-utils\n', 'utf8');
+
+    await installFromRemote(createRemoteCatalog(createArchiveBuffer()), 'demo', {
+      scope: 'local',
+      baseDir: repoRoot
+    });
+
+    expect(await readFile(path.join(repoRoot, '.gitignore'), 'utf8')).toBe('existing-ignore\n');
+    expect(await readFile(path.join(repoRoot, '.codex-utils', 'README.md'), 'utf8')).toBe('existing-codex-utils\n');
+    expect(await readFile(path.join(repoRoot, 'skills', 'demo-router', 'SKILL.md'), 'utf8')).toContain('name: demo-router');
+  });
+
   it('blocks local single-skill install targets', async () => {
     const repoRoot = await mkdtemp(path.join(os.tmpdir(), 'skill-orchestrator-repo-'));
     tempDirs.push(repoRoot);
@@ -135,6 +153,24 @@ describe('installFromRemote', () => {
         baseDir: repoRoot
       })
     ).rejects.toThrow(/full workspace install/i);
+  });
+
+  it('requires confirmation only for relevant local conflicts', async () => {
+    const repoRoot = await mkdtemp(path.join(os.tmpdir(), 'skill-orchestrator-repo-'));
+    tempDirs.push(repoRoot);
+
+    await writeFile(path.join(repoRoot, '.gitignore'), 'existing-ignore\n', 'utf8');
+    await mkdir(path.join(repoRoot, '.codex-utils'), { recursive: true });
+    await writeFile(path.join(repoRoot, '.codex-utils', 'README.md'), 'existing-codex-utils\n', 'utf8');
+    await mkdir(path.join(repoRoot, 'skills'), { recursive: true });
+
+    await expect(
+      installFromRemote(createRemoteCatalog(createArchiveBuffer()), 'demo', {
+        scope: 'local',
+        baseDir: repoRoot,
+        yes: true
+      })
+    ).rejects.toThrow(/Conflicting project paths:\n- skills/);
   });
 
   it('removes a managed skill from the selected scope', async () => {

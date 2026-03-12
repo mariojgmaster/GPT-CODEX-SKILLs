@@ -53,6 +53,8 @@ codex-skills install rm --scope local
 
 Local scope installs the selected workspace directly into the current project root. For example, a workspace can place `AGENTS.md`, `skills/`, `.codex-utils/`, and any other workspace files at the project root.
 
+If the project already has a root `.gitignore`, the CLI preserves it and does not replace it with the workspace version. Existing `.codex-utils/` is also preserved during local installation.
+
 Install a single skill:
 
 ```bash
@@ -89,6 +91,7 @@ codex-skills doctor installed
 - Global scope installs individual skills into the Codex home.
 - Local scope installs one workspace directly into the current project root and keeps orchestration metadata under `./.codex/`.
 - Local scope supports full workspace install/remove only.
+- Local conflict confirmation focuses on workspace content relevant to the installed skill pack and ignores preserved infrastructure such as `.codex-utils/` and an existing root `.gitignore`.
 - If another workspace is already installed locally, the CLI requires explicit confirmation before replacement and shows the project paths that will be removed.
 - Resolves the catalog from the GitHub repository configured in `catalog.manifest.json`.
 - Installs workspace packs as individual Codex skills compatible with the native skill model.

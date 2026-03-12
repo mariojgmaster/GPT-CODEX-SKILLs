@@ -34,6 +34,8 @@ interface LocalWorkspacePlan {
   allRelativePaths: string[];
 }
 
+const LOCAL_PRESERVED_TOP_LEVEL = new Set(['.codex-utils', '.gitignore']);
+
 async function exists(targetPath: string): Promise<boolean> {
   try {
     await access(targetPath, fsConstants.F_OK);
@@ -191,6 +193,21 @@ async function describeWorkspaceRoot(
   };
 }
 
+function isPreservedLocalEntry(entry: string): boolean {
+  return LOCAL_PRESERVED_TOP_LEVEL.has(entry);
+}
+
+function filterRelevantTopLevelEntries(entries: string[]): string[] {
+  return entries.filter((entry) => !isPreservedLocalEntry(entry));
+}
+
+function filterRelevantRelativePaths(paths: string[]): string[] {
+  return paths.filter((relativePath) => {
+    const topLevelEntry = relativePath.split('/')[0];
+    return topLevelEntry ? !isPreservedLocalEntry(topLevelEntry) : false;
+  });
+}
+
 function getInstalledWorkspaceName(registry: InstallRegistry): string | undefined {
   const installedWorkspaces = Array.from(new Set(Object.values(registry.installedSkills).map((entry) => entry.workspace)));
 
@@ -232,25 +249,52 @@ async function installToLocalScope(
   const selection = resolveSelection(remoteCatalog.manifest, target);
   const incomingPlan = await describeWorkspaceRoot(extractedRoot, selection.workspace);
   const existingWorkspaceName = getInstalledWorkspaceName(registry);
+  const incomingRelevantEntries = filterRelevantTopLevelEntries(incomingPlan.topLevelEntries);
 
   await validateWorkspaceSkills(extractedRoot, selection.workspace);
 
   if (!existingWorkspaceName) {
-    const unmanagedCollisions = [];
+    const unmanagedCollisions: string[] = [];
 
-    for (const entry of incomingPlan.topLevelEntries) {
+    for (const entry of incomingRelevantEntries) {
       const targetPath = path.join(codexPaths.installRoot, entry);
       if (await exists(targetPath)) {
-        unmanagedCollisions.push(targetPath);
+        unmanagedCollisions.push(entry);
       }
     }
 
     if (unmanagedCollisions.length > 0) {
-      throw new Error(
-        `Local workspace install would collide with existing project paths:\n${unmanagedCollisions
-          .map((entry) => `- ${entry}`)
-          .join('\n')}`
+      if (options.dryRun) {
+        return {
+          scope: codexPaths.scope,
+          workspace: selection.workspace.name,
+          routerSkill: selection.workspace.routerSkill,
+          sha: remoteCatalog.sha,
+          repo: remoteCatalog.repoFullName,
+          installed: selection.skills.map((skill) => ({
+            name: skill.name,
+            path: path.join(codexPaths.skillsDir, skill.name),
+            action: 'replace-managed'
+          }))
+        };
+      }
+
+      if (options.yes) {
+        throw new Error(
+          `Local workspace replacement requires explicit interactive confirmation.\n` +
+            `Conflicting project paths:\n${formatTree(unmanagedCollisions)}`
+        );
+      }
+
+      const accepted = await confirm(
+        `The following project paths will be replaced by workspace "${selection.workspace.name}":\n` +
+          `${formatTree(unmanagedCollisions)}\n` +
+          'Replace them?'
       );
+
+      if (!accepted) {
+        throw new Error('Local workspace installation cancelled.');
+      }
     }
   } else if (existingWorkspaceName !== selection.workspace.name) {
     const existingWorkspace = getWorkspace(remoteCatalog.manifest, existingWorkspaceName);
@@ -259,6 +303,7 @@ async function installToLocalScope(
     }
 
     const existingPlan = await describeWorkspaceRoot(extractedRoot, existingWorkspace);
+    const removablePaths = filterRelevantRelativePaths(existingPlan.allRelativePaths);
     if (options.dryRun) {
       return {
         scope: codexPaths.scope,
@@ -277,14 +322,14 @@ async function installToLocalScope(
     if (options.yes) {
       throw new Error(
         `Replacing a local workspace requires explicit interactive confirmation.\n` +
-          `Paths scheduled for removal:\n${formatTree(existingPlan.allRelativePaths)}`
+          `Paths scheduled for removal:\n${formatTree(removablePaths)}`
       );
     }
 
     const accepted = await confirm(
       `Another workspace is already installed locally: "${existingWorkspaceName}".\n` +
         `The following project paths will be removed before installing "${selection.workspace.name}":\n` +
-        `${formatTree(existingPlan.allRelativePaths)}\n` +
+        `${formatTree(removablePaths)}\n` +
         'Continue?'
     );
 
@@ -319,9 +364,9 @@ async function installToLocalScope(
       }
 
       const existingPlan = await describeWorkspaceRoot(extractedRoot, existingWorkspace);
-      const incomingEntrySet = new Set(incomingPlan.topLevelEntries);
+      const incomingEntrySet = new Set(incomingRelevantEntries);
 
-      for (const entry of existingPlan.topLevelEntries) {
+      for (const entry of filterRelevantTopLevelEntries(existingPlan.topLevelEntries)) {
         if (!incomingEntrySet.has(entry)) {
           await rm(path.join(codexPaths.installRoot, entry), { recursive: true, force: true });
         }
@@ -333,6 +378,10 @@ async function installToLocalScope(
     }
 
     for (const entry of incomingPlan.topLevelEntries) {
+      if (isPreservedLocalEntry(entry) && (await exists(path.join(codexPaths.installRoot, entry)))) {
+        continue;
+      }
+
       const sourcePath = path.join(incomingPlan.workspaceRoot, entry);
       const stagedPath = path.join(sessionStageRoot, entry);
       const targetPath = path.join(codexPaths.installRoot, entry);
@@ -400,7 +449,7 @@ async function removeFromLocalScope(
 
   const workspacePlan = await describeWorkspaceRoot(extractedRoot, selection.workspace);
 
-  for (const entry of workspacePlan.topLevelEntries) {
+  for (const entry of filterRelevantTopLevelEntries(workspacePlan.topLevelEntries)) {
     await rm(path.join(codexPaths.installRoot, entry), { recursive: true, force: true });
   }
 
